@@ -1,0 +1,26 @@
+{
+  "type": "project",
+  "license": "BSD-3-Clause",
+  "description": "",
+  "authors": [
+    {
+      "name": "Maxim Butorin",
+      "email": "me@iviakc.ru"
+    }
+  ],
+
+  "require": {
+    "php": ">=7.0"
+  },
+
+  "require-dev": {
+    "phpunit/phpunit": "*"
+  },
+
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  }
+
+}

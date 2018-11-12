@@ -1,0 +1,28 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:1.10
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+    volumes:
+    - nginx-data:/letsencrypt
+    depends_on:
+    - web
+    links:
+    - web
+
+  web:
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+volumes:
+  nginx-data:
+    driver: local
