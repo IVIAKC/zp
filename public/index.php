@@ -5,14 +5,14 @@ require_once '../vendor/autoload.php';
 $params = [
     'geo_id' => '826',
     'period' => 'today',
-    'limit' => 1,
-    'fields' => ['rubrics','position_dictionary'],
+    'fields' => ['rubrics','position_dictionary', 'header'],
 ];
-$request = new \App\Entity\Request('services_limits', $params);
+$request = new \App\Entity\Request('vacancies', $params);
 $client = new \App\Entity\Client();
 
 
-$client->send($request);
+
+$response = $client->send($request);
 ?>
 
 
@@ -25,15 +25,14 @@ $client->send($request);
 <body>
 <table border="1">
     <caption>Таблица размеров обуви</caption>
-    <!--    --><?php //foreach (?>
+    <?php foreach ($response->getBody() as $data):
+        ?>
+        <tr>
+            <td><?= $data['header'] ?></td>
+            <td>2</td>
+        </tr>
 
-
-    <tr>
-        <td>1</td>
-        <td>2</td>
-    </tr>
-
-    <!--        --><?php //  endforeach;   ?>
+    <?php endforeach; ?>
 </table>
 </body>
 </html>
