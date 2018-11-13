@@ -1,18 +1,20 @@
 <?php
 
+use App\Provider\VacancyProvider;
+
 require_once '../vendor/autoload.php';
 
-$params = [
-    'geo_id' => '826',
-    'period' => 'today',
-    'fields' => ['rubrics','position_dictionary', 'header'],
-];
-$request = new \App\Entity\Request('vacancies', $params);
-$client = new \App\Entity\Client();
+$manager = new \App\Manager();
+//$vacancys = new VacancyProvider(null);
 
+//$vacancy = $vacancys->getVacancy();
+$vacancy = $manager->getVacancy();
+$rubric = $manager->getRubric($vacancy);
 
+//$rubrics = new \App\Provider\RubricProvider(null);
 
-$response = $client->send($request);
+//$rubric = $rubrics->getRubric();
+
 ?>
 
 
@@ -23,16 +25,32 @@ $response = $client->send($request);
     <title>Таблица размеров обуви</title>
 </head>
 <body>
+<!--<table border="1">-->
+<!--    <caption>Таблица размеров обуви</caption>-->
+<!--    --><?php //foreach ($vacancy as $data):?>
+<!--        <tr>-->
+<!--            <td>--><?//= /** @var \App\Entity\Vacancy $data */
+//                $data->getDictionary() ?><!--</td>-->
+<!--            <td>--><?//= /** @var \App\Entity\Vacancy $data */
+//                $data->getTitle() ?><!--</td>-->
+<!--        </tr>-->
+<!---->
+<!--    --><?php //endforeach; ?>
+<!---->
+<!--</table>-->
+
 <table border="1">
     <caption>Таблица размеров обуви</caption>
-    <?php foreach ($response->getBody() as $data):
-        ?>
-        <tr>
-            <td><?= $data['header'] ?></td>
-            <td>2</td>
-        </tr>
+<?php foreach ($rubric as $data):?>
+    <tr>
+        <td><?= /** @var \App\Entity\Rubric $data */
+                $data->getId() ?></td>
+        <td><?= $data->getName() ?></td>
+        <td><?= $data->getCount() ?></td>
+    </tr>
 
-    <?php endforeach; ?>
+<?php endforeach; ?>
+
 </table>
 </body>
 </html>

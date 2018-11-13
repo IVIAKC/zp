@@ -30,17 +30,21 @@ class Client
         $this->protocol = static::DEFAULT_PROTOCOL;
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     */
     public function send(Request $request)
     {
         $curl = curl_init();
-        $url = $this->getFullUrl();
+
         $result = [];
-        $a = 0;
+        $url = $this->getFullUrl();
+
         do {
             curl_setopt($curl, CURLOPT_URL, $url . $request->getParams());
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_HEADER, 0);
-
 
             $output = curl_exec($curl);
 
@@ -50,11 +54,12 @@ class Client
             if (isset($response['metadata']['errors'])) {
                 throw new \RuntimeException('error!');
             }
-            $a++;
-        } while ($request->addOffset($count) && false);
+        } while ($request->addOffset($count));
+
         curl_close($curl);
-        $responseModel = new Response($result, $response['metadata']);
-//        var_dump($response['metadata']['resultset']['count'], $a);
+
+        $responseModel = new Response($result);
+
         return $responseModel;
     }
 

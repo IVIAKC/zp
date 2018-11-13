@@ -2,33 +2,30 @@
 
 namespace App\Entity;
 
-
+/**
+ * Class Response
+ * @package App\Entity
+ */
 class Response
 {
-    /** @var array $metadata */
-    protected $metadata;
-
     /** @var array $data */
     protected $data;
 
     /**
      * Response constructor.
      * @param array $data
-     * @param array $metadata
      */
-    public function __construct(array $data, array $metadata)
+    public function __construct(array $data)
     {
         $this->data = $data;
-        $this->metadata = $metadata;
     }
 
-    public function getBody()
+    /**
+     * @return array
+     */
+    public function getBody(): array
     {
         return $this->data;
     }
 
-    public function getMeta()
-    {
-        return $this->metadata;
-    }
 }

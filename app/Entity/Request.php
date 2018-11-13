@@ -28,10 +28,11 @@ class Request
      */
     public function __construct($method, $params)
     {
-        $this->method = $method;
-        $this->params = http_build_query($params);
         $this->offset = 0;
         $this->limit = 100;
+        $this->method = $method;
+        $this->params = $params;
+        $this->updateParams();
     }
 
     /**
@@ -39,7 +40,7 @@ class Request
      */
     public function getParams(): string
     {
-        return $this->method . '?' . $this->params . "&offset=$this->offset&limit=$this->limit";
+        return $this->method . '?' . http_build_query($this->params);
     }
 
     /**
@@ -49,7 +50,8 @@ class Request
     public function addOffset(int $count): bool
     {
         if ($this->checkPaginate($count)) {
-            $this->offset += 1;
+            $this->offset += $this->limit;
+            $this->updateParams();
             return true;
         }
         return false;
@@ -61,6 +63,12 @@ class Request
      */
     public function checkPaginate(int $count): bool
     {
-        return ($this->limit * $this->offset + $this->limit) < $count;
+        return ($this->limit + $this->offset) < $count;
+    }
+
+    protected function updateParams(): void
+    {
+        $this->params['offset'] = $this->offset;
+        $this->params['limit'] = $this->limit;
     }
 }
