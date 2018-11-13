@@ -8,11 +8,18 @@ namespace App\Entity;
  */
 class Request
 {
+
     /** @var array $params */
     protected $params;
 
     /** @var string $method */
     protected $method;
+
+    /** @var int $limit */
+    protected $limit;
+
+    /** @var int $offset */
+    protected $offset;
 
     /**
      * Request constructor.
@@ -22,14 +29,38 @@ class Request
     public function __construct($method, $params)
     {
         $this->method = $method;
-        $this->params = $params;
+        $this->params = http_build_query($params);
+        $this->offset = 0;
+        $this->limit = 100;
     }
 
     /**
      * @return string
      */
-    public function getParams()
+    public function getParams(): string
     {
-        return $this->method . '?' . http_build_query($this->params);
+        return $this->method . '?' . $this->params . "&offset=$this->offset&limit=$this->limit";
+    }
+
+    /**
+     * @param int $count
+     * @return bool
+     */
+    public function addOffset(int $count): bool
+    {
+        if ($this->checkPaginate($count)) {
+            $this->offset += 1;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param int $count
+     * @return bool
+     */
+    public function checkPaginate(int $count): bool
+    {
+        return ($this->limit * $this->offset + $this->limit) < $count;
     }
 }

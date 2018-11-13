@@ -13,19 +13,22 @@ class Response
 
     /**
      * Response constructor.
-     * @param array $input
+     * @param array $data
+     * @param array $metadata
      */
-    public function __construct(array $input)
+    public function __construct(array $data, array $metadata)
     {
-        $this->metadata = array_shift($input);
-        $this->data = array_shift($input);
+        $this->data = $data;
+        $this->metadata = $metadata;
     }
 
-    /**
-     * @return bool
-     */
-    public function isError(): bool
+    public function getBody()
     {
-        return isset($this->metadata['errors']);
+        return $this->data;
+    }
+
+    public function getMeta()
+    {
+        return $this->metadata;
     }
 }

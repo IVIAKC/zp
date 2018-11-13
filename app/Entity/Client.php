@@ -34,22 +34,28 @@ class Client
     {
         $curl = curl_init();
         $url = $this->getFullUrl();
-        curl_setopt($curl, CURLOPT_URL, $url . $request->getParams());
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HEADER, 0);
+        $result = [];
+        $a = 0;
+        do {
+            curl_setopt($curl, CURLOPT_URL, $url . $request->getParams());
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_HEADER, 0);
 
-        $output = curl_exec($curl);
 
+            $output = curl_exec($curl);
+
+            $response = $this->getResponse($output);
+            $result = array_merge($result, array_pop($response));
+            $count = $response['metadata']['resultset']['count'];
+            if (isset($response['metadata']['errors'])) {
+                throw new \RuntimeException('error!');
+            }
+            $a++;
+        } while ($request->addOffset($count) && false);
         curl_close($curl);
-
-        $response = new Response($this->getResponse($output));
-
-        if($response->isError()){
-            //TODO Поправить
-            throw new \RuntimeException('Alarme!!!');
-        }
-
-        return $response;
+        $responseModel = new Response($result, $response['metadata']);
+//        var_dump($response['metadata']['resultset']['count'], $a);
+        return $responseModel;
     }
 
     /**
