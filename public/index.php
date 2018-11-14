@@ -1,18 +1,17 @@
 <?php
-
 require_once '../vendor/autoload.php';
 
-$params = [
-    'geo_id' => '826',
-    'period' => 'today',
-    'fields' => ['rubrics','position_dictionary', 'header'],
-];
-$request = new \App\Entity\Request('vacancies', $params);
-$client = new \App\Entity\Client();
+
+use App\Interfaces\TableRow;
+
+/** @var TableRow $position */
+
+$manager = new \App\Manager();
+
+$popularPosition = $manager->getPopularPosition();
+$popularRubric = $manager->getPopularRubric();
 
 
-
-$response = $client->send($request);
 ?>
 
 
@@ -20,19 +19,34 @@ $response = $client->send($request);
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Таблица размеров обуви</title>
+    <title>Отчет</title>
 </head>
 <body>
 <table border="1">
-    <caption>Таблица размеров обуви</caption>
-    <?php foreach ($response->getBody() as $data):
-        ?>
+    <caption>Популярные должности</caption>
+    <?php foreach ($popularPosition as $key => $position): ?>
         <tr>
-            <td><?= $data['header'] ?></td>
-            <td>2</td>
+            <td><?= $key ?></td>
+            <td><?= $position->getTitle() ?></td>
+            <td><?= $position->getCount() ?></td>
         </tr>
 
     <?php endforeach; ?>
+
+</table>
+
+<table border="1">
+    <caption>Популярность в рубриках</caption>
+    <?php
+    foreach ($popularRubric as $key => $position): ?>
+        <tr>
+            <td><?= $key ?></td>
+            <td><?= $position->getTitle() ?></td>
+            <td><?= $position->getCount() ?></td>
+        </tr>
+
+    <?php endforeach; ?>
+
 </table>
 </body>
 </html>
