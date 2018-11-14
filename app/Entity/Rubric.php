@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 
-class Rubric
+class Rubric implements \App\Interfaces\TableRow
 {
     /** @var string $name */
     protected $name;
@@ -47,8 +47,16 @@ class Rubric
         return $this->count;
     }
 
-    public function appendCount()
+    public function increaseCount(): void
     {
         $this->count += 1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->name;
     }
 }

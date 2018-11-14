@@ -3,15 +3,20 @@
 namespace App;
 
 
+use App\Entity\TableRow;
 use App\Entity\Vacancy;
-use App\Provider\RubricProvider;
-use App\Provider\VacancyProvider;
+use App\Interfaces\TableRow as TableRowInterface;
+use App\Providers\RubricProvider;
+use App\Providers\VacancyProvider;
 
 class Manager
 {
+    /** @var VacancyProvider */
     protected $vacancyProvider;
-
+    /** @var RubricProvider */
     protected $rubricProvider;
+    /** @var array|null|Vacancy[] $vacancy */
+    protected $vacancy;
 
     public function __construct()
     {
@@ -21,52 +26,66 @@ class Manager
 
     public function getPopularPosition()
     {
-        //Боже мой что я наделал...
-        $vacancy = $this->vacancyProvider->get();
         $position = [];
-        foreach ($vacancy as $item) {
+        foreach ($this->getVacancy() as $item) {
+
             $word = $item->getWord();
-            if (isset($word['id'])) {
-                if (!isset($position[$word['id']])) {
-                    $position[$word['id']] = ['title' => $word['title'], 'count' => 1];
-                }else{
-                    $position[$word['id']]['count'] += 1;
-                }
+
+            if (!$word) {
+                continue;
+            }
+
+            if (!isset($position[$word['id']])) {
+                $position[$word['id']] = new TableRow($word['title']);
+            } else {
+                $position[$word['id']]->increaseCount();
             }
         }
 
-
-        usort($position, function ($first, $last) {
-            return $first['count'] < $last['count'];
-        });
-
+        $this->sortTableRow($position);
 
         return $position;
     }
 
     /**
-     * @param Vacancy[]|array|null $vacancy
      * @return array
      */
     public function getPopularRubric()
     {
         $rubric = $this->rubricProvider->get();
 
-        $vacancy = $this->vacancyProvider->get();
-
-
-        //TODO Пересмотреть и выдернуть.
         /** @var Vacancy $item */
-        foreach ($vacancy as $item) {
-            foreach ($item->getRubrics() as $item) {
-                $rubric[$item['id']]->appendCount();
+        foreach ($this->getVacancy() as $item) {
+            foreach ($item->getRubrics() as $rubrics) {
+                $rubric[$rubrics['id']]->increaseCount();
             }
         }
 
-        usort($rubric, function ($first, $last) {
-            return $first->getCount() < $last->getCount();
-        });
+        $this->sortTableRow($rubric);
 
         return $rubric;
+    }
+
+    /**
+     * @return array|Vacancy[]
+     */
+    protected function getVacancy()
+    {
+
+        if ($this->vacancy == null) {
+            $this->vacancy = $this->vacancyProvider->get();
+        }
+
+        return $this->vacancy;
+    }
+
+    /**
+     * @param array|TableRowInterface[] $array
+     */
+    protected function sortTableRow(array &$array)
+    {
+        usort($array, function (TableRowInterface $first, TableRowInterface $last) {
+            return $first->getCount() < $last->getCount();
+        });
     }
 }

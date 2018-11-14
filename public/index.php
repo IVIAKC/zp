@@ -1,12 +1,15 @@
 <?php
-
-
 require_once '../vendor/autoload.php';
+
+
+use App\Interfaces\TableRow;
+
+/** @var TableRow $position */
 
 $manager = new \App\Manager();
 
-$vacancy = $manager->getPopularPosition();
-$rubric = $manager->getPopularRubric();
+$popularPosition = $manager->getPopularPosition();
+$popularRubric = $manager->getPopularRubric();
 
 
 ?>
@@ -21,11 +24,11 @@ $rubric = $manager->getPopularRubric();
 <body>
 <table border="1">
     <caption>Популярные должности</caption>
-    <?php foreach ($vacancy as $key => $data):?>
+    <?php foreach ($popularPosition as $key => $position): ?>
         <tr>
             <td><?= $key ?></td>
-            <td><?= $data['title'] ?></td>
-            <td><?= $data['count'] ?></td>
+            <td><?= $position->getTitle() ?></td>
+            <td><?= $position->getCount() ?></td>
         </tr>
 
     <?php endforeach; ?>
@@ -34,15 +37,15 @@ $rubric = $manager->getPopularRubric();
 
 <table border="1">
     <caption>Популярность в рубриках</caption>
-<?php foreach ($rubric as $data):?>
-    <tr>
-        <td><?= /** @var \App\Entity\Rubric $data */
-                $data->getId() ?></td>
-        <td><?= $data->getName() ?></td>
-        <td><?= $data->getCount() ?></td>
-    </tr>
+    <?php
+    foreach ($popularRubric as $key => $position): ?>
+        <tr>
+            <td><?= $key ?></td>
+            <td><?= $position->getTitle() ?></td>
+            <td><?= $position->getCount() ?></td>
+        </tr>
 
-<?php endforeach; ?>
+    <?php endforeach; ?>
 
 </table>
 </body>

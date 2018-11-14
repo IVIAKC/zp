@@ -54,7 +54,7 @@ class Client
             if (isset($response['metadata']['errors'])) {
                 throw new \RuntimeException('error!');
             }
-        } while ($request->addOffset($count));
+        } while ($request->addOffset($count) && false);
 
         curl_close($curl);
 
