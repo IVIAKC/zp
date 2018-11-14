@@ -22,25 +22,15 @@ class Vacancy
 
     /**
      * Vacancy constructor.
-     * @param string $name
      * @param int $id
      * @param array|null $rubrics
      * @param null|array $word
      */
-    public function __construct(string $name, int $id, ?array $rubrics = null, ?array $word = null)
+    public function __construct(int $id, ?array $rubrics = null, ?array $word = null)
     {
         $this->rubrics = $rubrics;
         $this->word = $word;
-        $this->name = $name;
         $this->id = $id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     /**

@@ -1,19 +1,13 @@
 <?php
 
-use App\Provider\VacancyProvider;
 
 require_once '../vendor/autoload.php';
 
 $manager = new \App\Manager();
-//$vacancys = new VacancyProvider(null);
 
-//$vacancy = $vacancys->getVacancy();
-$vacancy = $manager->getVacancy();
-$rubric = $manager->getRubric($vacancy);
+$vacancy = $manager->getPopularPosition();
+$rubric = $manager->getPopularRubric();
 
-//$rubrics = new \App\Provider\RubricProvider(null);
-
-//$rubric = $rubrics->getRubric();
 
 ?>
 
@@ -22,25 +16,24 @@ $rubric = $manager->getRubric($vacancy);
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Таблица размеров обуви</title>
+    <title>Отчет</title>
 </head>
 <body>
-<!--<table border="1">-->
-<!--    <caption>Таблица размеров обуви</caption>-->
-<!--    --><?php //foreach ($vacancy as $data):?>
-<!--        <tr>-->
-<!--            <td>--><?//= /** @var \App\Entity\Vacancy $data */
-//                $data->getDictionary() ?><!--</td>-->
-<!--            <td>--><?//= /** @var \App\Entity\Vacancy $data */
-//                $data->getTitle() ?><!--</td>-->
-<!--        </tr>-->
-<!---->
-<!--    --><?php //endforeach; ?>
-<!---->
-<!--</table>-->
+<table border="1">
+    <caption>Популярные должности</caption>
+    <?php foreach ($vacancy as $key => $data):?>
+        <tr>
+            <td><?= $key ?></td>
+            <td><?= $data['title'] ?></td>
+            <td><?= $data['count'] ?></td>
+        </tr>
+
+    <?php endforeach; ?>
+
+</table>
 
 <table border="1">
-    <caption>Таблица размеров обуви</caption>
+    <caption>Популярность в рубриках</caption>
 <?php foreach ($rubric as $data):?>
     <tr>
         <td><?= /** @var \App\Entity\Rubric $data */

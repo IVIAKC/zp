@@ -19,24 +19,42 @@ class Manager
         $this->vacancyProvider = new VacancyProvider();
     }
 
-    public function getVacancy()
+    public function getPopularPosition()
     {
-        //TODO Пересмотреть
-
+        //Боже мой что я наделал...
         $vacancy = $this->vacancyProvider->get();
-        return $vacancy;
+        $position = [];
+        foreach ($vacancy as $item) {
+            $word = $item->getWord();
+            if (isset($word['id'])) {
+                if (!isset($position[$word['id']])) {
+                    $position[$word['id']] = ['title' => $word['title'], 'count' => 1];
+                }else{
+                    $position[$word['id']]['count'] += 1;
+                }
+            }
+        }
+
+
+        usort($position, function ($first, $last) {
+            return $first['count'] < $last['count'];
+        });
+
+
+        return $position;
     }
 
     /**
      * @param Vacancy[]|array|null $vacancy
      * @return array
      */
-    public function getRubric(?array $vacancy)
+    public function getPopularRubric()
     {
         $rubric = $this->rubricProvider->get();
-        if ($vacancy === null) {
-            $vacancy = $this->getVacancy();
-        }
+
+        $vacancy = $this->vacancyProvider->get();
+
+
         //TODO Пересмотреть и выдернуть.
         /** @var Vacancy $item */
         foreach ($vacancy as $item) {
@@ -44,6 +62,10 @@ class Manager
                 $rubric[$item['id']]->appendCount();
             }
         }
+
+        usort($rubric, function ($first, $last) {
+            return $first->getCount() < $last->getCount();
+        });
 
         return $rubric;
     }

@@ -30,7 +30,7 @@ class VacancyProvider
         $vacancy = [];
         $body = $response->getBody();
         foreach ($body as $item) {
-            $vacancy[] = new Vacancy($item['header'], $item['id'], $item['rubrics'], $item['position_dictionary']);
+            $vacancy[] = new Vacancy($item['id'], $item['rubrics'], $item['position_dictionary']);
         }
 
         return $vacancy;
