@@ -13,7 +13,7 @@ interface TableRow
     /**
      * @return int
      */
-    public function getCount();
+    public function getCount(): int;
 
     /**
      * @return string

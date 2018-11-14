@@ -26,44 +26,25 @@ class Manager
 
     public function getPopularPosition()
     {
-        $position = [];
+        $result = [];
         foreach ($this->getVacancy() as $item) {
 
-            $word = $item->getWord();
+            $word = $item->getPosition();
 
             if (!$word) {
                 continue;
             }
 
-            if (!isset($position[$word['id']])) {
-                $position[$word['id']] = new TableRow($word['title']);
+            if ($result[$word['id']] === null) {
+                $result[$word['id']] = new TableRow($word['title']);
             } else {
-                $position[$word['id']]->increaseCount();
+                $result[$word['id']]->increaseCount();
             }
         }
 
-        $this->sortTableRow($position);
+        $this->sortTableRow($result);
 
-        return $position;
-    }
-
-    /**
-     * @return array
-     */
-    public function getPopularRubric()
-    {
-        $rubric = $this->rubricProvider->get();
-
-        /** @var Vacancy $item */
-        foreach ($this->getVacancy() as $item) {
-            foreach ($item->getRubrics() as $rubrics) {
-                $rubric[$rubrics['id']]->increaseCount();
-            }
-        }
-
-        $this->sortTableRow($rubric);
-
-        return $rubric;
+        return $result;
     }
 
     /**
@@ -87,5 +68,24 @@ class Manager
         usort($array, function (TableRowInterface $first, TableRowInterface $last) {
             return $first->getCount() < $last->getCount();
         });
+    }
+
+    /**
+     * @return array
+     */
+    public function getPopularRubric()
+    {
+        $rubric = $this->rubricProvider->get();
+
+        /** @var Vacancy $vacancy */
+        foreach ($this->getVacancy() as $vacancy) {
+            foreach ($vacancy->getRubrics() as $rubrics) {
+                $rubric[$rubrics['id']]->increaseCount();
+            }
+        }
+
+        $this->sortTableRow($rubric);
+
+        return $rubric;
     }
 }

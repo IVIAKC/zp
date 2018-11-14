@@ -11,34 +11,21 @@ class Vacancy
     /** @var string $name */
     protected $name;
 
-    /** @var string $id */
-    protected $id;
-
     /** @var array|null $rubrics */
     protected $rubrics;
 
-    /** @var null|string  */
-    protected $word;
+    /** @var null|string */
+    protected $position;
 
     /**
      * Vacancy constructor.
-     * @param int $id
      * @param array|null $rubrics
-     * @param null|array $word
+     * @param null|array $position
      */
-    public function __construct(int $id, ?array $rubrics = null, ?array $word = null)
+    public function __construct(?array $rubrics = null, ?array $position = null)
     {
         $this->rubrics = $rubrics;
-        $this->word = $word;
-        $this->id = $id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->id;
+        $this->position = $position;
     }
 
     /**
@@ -52,8 +39,8 @@ class Vacancy
     /**
      * @return null|string
      */
-    public function getWord()
+    public function getPosition()
     {
-        return $this->word;
+        return $this->position;
     }
 }

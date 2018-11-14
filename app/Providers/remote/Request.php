@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Providers\remote;
 
 /**
  * Class Request
@@ -32,7 +32,13 @@ class Request
         $this->limit = 100;
         $this->method = $method;
         $this->params = $params;
-        $this->updateParams();
+        $this->setPagination();
+    }
+
+    protected function setPagination(): void
+    {
+        $this->params['offset'] = $this->offset;
+        $this->params['limit'] = $this->limit;
     }
 
     /**
@@ -51,7 +57,7 @@ class Request
     {
         if ($this->checkPaginate($count)) {
             $this->offset += $this->limit;
-            $this->updateParams();
+            $this->setPagination();
             return true;
         }
         return false;
@@ -64,11 +70,5 @@ class Request
     public function checkPaginate(int $count): bool
     {
         return ($this->limit + $this->offset) < $count;
-    }
-
-    protected function updateParams(): void
-    {
-        $this->params['offset'] = $this->offset;
-        $this->params['limit'] = $this->limit;
     }
 }
