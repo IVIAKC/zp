@@ -18,11 +18,12 @@ class TableRow implements TableRowInterface
     /**
      * TableRow constructor.
      * @param string $title
+     * @param int $count
      */
-    public function __construct(string $title)
+    public function __construct(string $title, int $count = 0)
     {
         $this->title = $title;
-        $this->count = 1;
+        $this->count = $count;
     }
 
     public function increaseCount(): void
@@ -46,3 +47,4 @@ class TableRow implements TableRowInterface
         return $this->title;
     }
 }
+

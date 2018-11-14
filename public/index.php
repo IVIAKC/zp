@@ -19,28 +19,29 @@ $popularRubric = $manager->getPopularRubric();
     <title>Отчет</title>
 </head>
 <body>
-<table border="1">
-    <caption>Популярные должности</caption>
-    <?php foreach ($popularPosition as $position): ?>
-        <tr>
-            <td><?= $position->getTitle() ?></td>
-            <td><?= $position->getCount() ?></td>
-        </tr>
+<div style="margin-right: 50px; float: left">
+    <table border="1">
+        <caption>Популярные должности</caption>
+        <?php foreach ($popularPosition as $position): ?>
+            <tr>
+                <td><?= $position->getTitle() ?></td>
+                <td><?= $position->getCount() ?></td>
+            </tr>
+        <?php endforeach; ?>
 
-    <?php endforeach; ?>
+    </table>
+</div>
+<div style="float: left">
+    <table border="1">
+        <caption>Популярность рубрик</caption>
+        <?php foreach ($popularRubric as $position): ?>
+            <tr>
+                <td><?= $position->getTitle() ?></td>
+                <td><?= $position->getCount() ?></td>
+            </tr>
+        <?php endforeach; ?>
 
-</table>
-
-<table border="1">
-    <caption>Популярность в рубриках</caption>
-    <?php foreach ($popularRubric as $position): ?>
-        <tr>
-            <td><?= $position->getTitle() ?></td>
-            <td><?= $position->getCount() ?></td>
-        </tr>
-
-    <?php endforeach; ?>
-
-</table>
+    </table>
+</div>
 </body>
 </html>
