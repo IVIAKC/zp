@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
-
+/**
+ * Class Rubric
+ * @package App\Entity
+ */
 class Rubric implements \App\Interfaces\TableRow
 {
     /** @var string $name */
@@ -11,17 +14,12 @@ class Rubric implements \App\Interfaces\TableRow
     /** @var string $count */
     protected $count;
 
-    /** @var int $id */
-    protected $id;
-
     /**
      * Vacancy constructor.
      * @param string $name
-     * @param int $id
      */
-    public function __construct(?string $name, int $id)
+    public function __construct(string $name)
     {
-        $this->id = $id;
         $this->name = $name;
         $this->count = 0;
     }
@@ -34,15 +32,8 @@ class Rubric implements \App\Interfaces\TableRow
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->id;
-    }
 
-    public function getCount()
+    public function getCount(): int
     {
         return $this->count;
     }

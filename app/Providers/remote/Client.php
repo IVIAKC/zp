@@ -1,24 +1,19 @@
 <?php
 
-namespace App\Entity;
+namespace App\Providers\remote;
 
 
 class Client
 {
+    const DEFAULT_URL = 'api.zp.ru';
+    const DEFAULT_API_VERSION = 'v1';
+    const DEFAULT_PROTOCOL = 'https';
     /** @var string $url */
     protected $url;
-
     /** @var string $version */
     protected $version;
-
     /** @var string $protocol */
     protected $protocol;
-
-    const DEFAULT_URL = 'api.zp.ru';
-
-    const DEFAULT_API_VERSION = 'v1';
-
-    const DEFAULT_PROTOCOL = 'https';
 
     /**
      * Client constructor.
@@ -49,18 +44,17 @@ class Client
             $output = curl_exec($curl);
 
             $response = $this->getResponse($output);
-            $result = array_merge($result, array_pop($response));
-            $count = $response['metadata']['resultset']['count'];
             if (isset($response['metadata']['errors'])) {
                 throw new \RuntimeException('error!');
             }
-        } while ($request->addOffset($count) && false);
+            $count = $response['metadata']['resultset']['count'];
+            $result = array_merge($result, array_pop($response));
+
+        } while ($request->addOffset($count));
 
         curl_close($curl);
 
-        $responseModel = new Response($result);
-
-        return $responseModel;
+        return new Response($result);
     }
 
     /**
@@ -69,6 +63,22 @@ class Client
     public function getFullUrl(): string
     {
         return $this->getProtocol() . '://' . $this->getUrl() . '/' . $this->getVersion() . '/';
+    }
+
+    /**
+     * @return string
+     */
+    public function getProtocol(): string
+    {
+        return $this->protocol;
+    }
+
+    /**
+     * @param string $protocol
+     */
+    public function setProtocol(string $protocol): void
+    {
+        $this->protocol = $protocol;
     }
 
     /**
@@ -101,22 +111,6 @@ class Client
     public function setVersion(string $version): void
     {
         $this->version = $version;
-    }
-
-    /**
-     * @return string
-     */
-    public function getProtocol(): string
-    {
-        return $this->protocol;
-    }
-
-    /**
-     * @param string $protocol
-     */
-    public function setProtocol(string $protocol): void
-    {
-        $this->protocol = $protocol;
     }
 
     /**

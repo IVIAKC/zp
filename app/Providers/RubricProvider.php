@@ -3,9 +3,9 @@
 namespace App\Providers;
 
 
-use App\Entity\Client;
-use App\Entity\Request;
 use App\Entity\Rubric;
+use App\Providers\remote\Client;
+use App\Providers\remote\Request;
 
 /**
  * Class RubricProvider
@@ -26,7 +26,7 @@ class RubricProvider
     }
 
     /**
-     * @return array
+     * @return array|Rubric[]
      */
     public function get()
     {
@@ -35,9 +35,8 @@ class RubricProvider
         $response = $this->client->send($request);
 
         $rubrics = [];
-
         foreach ($response->getBody() as $item) {
-            $rubrics[$item['id']] = new Rubric($item['title'], $item['id']);
+            $rubrics[$item['id']] = new Rubric($item['title']);
         }
 
         return $rubrics;

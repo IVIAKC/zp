@@ -3,9 +3,14 @@
 namespace App\Providers;
 
 
-use App\Entity\Client;
 use App\Entity\Vacancy;
+use App\Providers\remote\Client;
+use App\Providers\remote\Request;
 
+/**
+ * Class VacancyProvider
+ * @package App\Providers
+ */
 class VacancyProvider
 {
     /** @var Client $client */
@@ -21,16 +26,16 @@ class VacancyProvider
         $params = [
             'geo_id' => '826',
             'period' => 'today',
-            'fields' => ['rubrics', 'position_dictionary', 'header', 'id'],
+            'fields' => ['rubrics', 'position_dictionary', 'id'],
         ];
-        $request = new \App\Entity\Request('vacancies', $params);
+
+        $request = new Request('vacancies', $params);
 
         $response = $this->client->send($request);
 
         $vacancy = [];
-        $body = $response->getBody();
-        foreach ($body as $item) {
-            $vacancy[] = new Vacancy($item['id'], $item['rubrics'], $item['position_dictionary']);
+        foreach ($response->getBody() as $item) {
+            $vacancy[] = new Vacancy($item['rubrics'], $item['position_dictionary']);
         }
 
         return $vacancy;

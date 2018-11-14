@@ -33,7 +33,7 @@ class TableRow implements TableRowInterface
     /**
      * @return int
      */
-    public function getCount()
+    public function getCount(): int
     {
         return $this->count;
     }

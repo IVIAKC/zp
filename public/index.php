@@ -1,7 +1,6 @@
 <?php
 require_once '../vendor/autoload.php';
 
-
 use App\Interfaces\TableRow;
 
 /** @var TableRow $position */
@@ -10,8 +9,6 @@ $manager = new \App\Manager();
 
 $popularPosition = $manager->getPopularPosition();
 $popularRubric = $manager->getPopularRubric();
-
-
 ?>
 
 
@@ -24,9 +21,8 @@ $popularRubric = $manager->getPopularRubric();
 <body>
 <table border="1">
     <caption>Популярные должности</caption>
-    <?php foreach ($popularPosition as $key => $position): ?>
+    <?php foreach ($popularPosition as $position): ?>
         <tr>
-            <td><?= $key ?></td>
             <td><?= $position->getTitle() ?></td>
             <td><?= $position->getCount() ?></td>
         </tr>
@@ -37,10 +33,8 @@ $popularRubric = $manager->getPopularRubric();
 
 <table border="1">
     <caption>Популярность в рубриках</caption>
-    <?php
-    foreach ($popularRubric as $key => $position): ?>
+    <?php foreach ($popularRubric as $position): ?>
         <tr>
-            <td><?= $key ?></td>
             <td><?= $position->getTitle() ?></td>
             <td><?= $position->getCount() ?></td>
         </tr>
