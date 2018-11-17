@@ -16,12 +16,19 @@ class VacancyProvider
     /** @var Client $client */
     protected $client;
 
+    /**
+     * VacancyProvider constructor.
+     * @param Client|null $client
+     */
     public function __construct(Client $client = null)
     {
         $this->client = $client ?? new Client();
     }
 
-    public function get()
+    /**
+     * @return array|Vacancy[]
+     */
+    public function get(): array
     {
         $params = [
             'geo_id' => '826',

@@ -9,6 +9,10 @@ use App\Interfaces\TableRow as TableRowInterface;
 use App\Providers\RubricProvider;
 use App\Providers\VacancyProvider;
 
+/**
+ * Class Manager
+ * @package App
+ */
 class Manager
 {
     /** @var VacancyProvider */
@@ -18,13 +22,19 @@ class Manager
     /** @var array|null|Vacancy[] $vacancy */
     protected $vacancy;
 
+    /**
+     * Manager constructor.
+     */
     public function __construct()
     {
         $this->rubricProvider = new RubricProvider();
         $this->vacancyProvider = new VacancyProvider();
     }
 
-    public function getPopularPosition()
+    /**
+     * @return array|TableRow[]
+     */
+    public function getPopularPosition(): array
     {
         $result = [];
         foreach ($this->getVacancy() as $item) {
@@ -48,10 +58,10 @@ class Manager
     /**
      * @return array|Vacancy[]
      */
-    protected function getVacancy()
+    protected function getVacancy(): array
     {
 
-        if ($this->vacancy == null) {
+        if ($this->vacancy === null) {
             $this->vacancy = $this->vacancyProvider->get();
         }
 
@@ -61,7 +71,7 @@ class Manager
     /**
      * @param array|TableRowInterface[] $array
      */
-    protected function sortTableRow(array &$array)
+    protected function sortTableRow(array &$array): void
     {
         usort($array, function (TableRowInterface $first, TableRowInterface $last) {
             return $first->getCount() < $last->getCount();
@@ -69,9 +79,9 @@ class Manager
     }
 
     /**
-     * @return array
+     * @return array|TableRow[]
      */
-    public function getPopularRubric()
+    public function getPopularRubric(): array
     {
         $result = [];
         foreach ($this->rubricProvider->get() as $key => $item){

@@ -28,7 +28,7 @@ class RubricProvider
     /**
      * @return array|Rubric[]
      */
-    public function get()
+    public function get(): array
     {
         $request = new Request('rubrics', []);
 

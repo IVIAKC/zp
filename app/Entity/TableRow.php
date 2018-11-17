@@ -28,7 +28,7 @@ class TableRow implements TableRowInterface
 
     public function increaseCount(): void
     {
-        $this->count += 1;
+        $this->count++;
     }
 
     /**

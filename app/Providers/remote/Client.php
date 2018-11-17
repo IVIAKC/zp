@@ -6,8 +6,9 @@ namespace App\Providers\remote;
 class Client
 {
     const DEFAULT_URL = 'api.zp.ru';
-    const DEFAULT_API_VERSION = 'v1';
     const DEFAULT_PROTOCOL = 'https';
+    const DEFAULT_API_VERSION = 'v1';
+
     /** @var string $url */
     protected $url;
     /** @var string $version */
@@ -17,19 +18,22 @@ class Client
 
     /**
      * Client constructor.
+     * @param string|null $url
+     * @param string|null $protocol
+     * @param string|null $version
      */
-    public function __construct()
+    public function __construct(string $url = null, string $protocol = null, string $version = null)
     {
-        $this->url = static::DEFAULT_URL;
-        $this->version = static::DEFAULT_API_VERSION;
-        $this->protocol = static::DEFAULT_PROTOCOL;
+        $this->url = $url ?? static::DEFAULT_URL;
+        $this->protocol = $protocol ?? static::DEFAULT_PROTOCOL;
+        $this->version = $version ?? static::DEFAULT_API_VERSION;
     }
 
     /**
      * @param Request $request
      * @return Response
      */
-    public function send(Request $request)
+    public function send(Request $request): Response
     {
         $curl = curl_init();
 
@@ -74,14 +78,6 @@ class Client
     }
 
     /**
-     * @param string $protocol
-     */
-    public function setProtocol(string $protocol): void
-    {
-        $this->protocol = $protocol;
-    }
-
-    /**
      * @return string
      */
     public function getUrl(): string
@@ -90,27 +86,11 @@ class Client
     }
 
     /**
-     * @param string $url
-     */
-    public function setUrl(string $url): void
-    {
-        $this->url = $url;
-    }
-
-    /**
      * @return string
      */
     public function getVersion(): string
     {
         return $this->version;
-    }
-
-    /**
-     * @param string $version
-     */
-    public function setVersion(string $version): void
-    {
-        $this->version = $version;
     }
 
     /**
