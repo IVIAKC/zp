@@ -2,24 +2,14 @@
 
 namespace App\Entity;
 
-use App\Interfaces\TableRow as TableRowInterface;
-
-/**
- * Class TableRow
- * @package App\Entity
- */
-class TableRow implements TableRowInterface
+class TableRow
 {
-    /** @var string $title */
-    protected $title;
-    /** @var int $count */
-    protected $count;
+    /** @var string  */
+    private $title;
 
-    /**
-     * TableRow constructor.
-     * @param string $title
-     * @param int $count
-     */
+    /** @var int  */
+    private $count;
+
     public function __construct(string $title, int $count = 0)
     {
         $this->title = $title;
@@ -31,17 +21,11 @@ class TableRow implements TableRowInterface
         $this->count++;
     }
 
-    /**
-     * @return int
-     */
     public function getCount(): int
     {
         return $this->count;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;

@@ -1,0 +1,18 @@
+.wrapper{
+    margin: auto;
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: center;
+    grid-column-gap: 50px
+}
+
+.container_table {
+    width: max-content;
+    overflow: auto;
+    height: 98vh;
+}
+
+.container_table table, .container_table table td {
+    border: 1px solid;
+}
+

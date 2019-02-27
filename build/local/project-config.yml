@@ -12,19 +12,8 @@ services:
     build:
       context: build/local/
       dockerfile: php-fpm.docker
-    environment: &project_config
+    environment:
       PHP_ENV: Local
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
     - .:/app
-    - ./build/local/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
-    - ./build/local/php-override.ini:/usr/local/etc/php/conf.d/php-override.ini:ro
     working_dir: /app
-  mysql:
-    ports:
-    - 127.0.0.7:3306:3306
-    environment:
-      <<: *project_config
-      MYSQL_ROOT_PASSWORD: "pAsswOrd"

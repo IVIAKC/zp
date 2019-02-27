@@ -2,73 +2,50 @@
 
 namespace App\Providers\remote;
 
-/**
- * Class Request
- * @package App\Entity
- */
 class Request
 {
-
-    /** @var array $params */
-    protected $params;
+    /** @var array */
+    private $params;
 
     /** @var string $method */
-    protected $method;
+    private $method;
 
     /** @var int $limit */
-    protected $limit;
+    private $limit = 100;
 
     /** @var int $offset */
-    protected $offset;
+    private $offset = 0;
 
-    /**
-     * Request constructor.
-     * @param $method
-     * @param $params
-     */
-    public function __construct($method, $params)
+    public function __construct(string $method, array $params = [])
     {
-        $this->offset = 0;
-        $this->limit = 100;
         $this->method = $method;
         $this->params = $params;
         $this->setPagination();
+    }
+
+    public function getParams(): string
+    {
+        return sprintf('%s?%s', $this->method, http_build_query($this->params));
+    }
+
+    public function addOffset(int $count): bool
+    {
+        if ($isCompletePaginate = $this->isCompletePaginate($count)) {
+            $this->offset += $this->limit;
+            $this->setPagination();
+        }
+
+        return $isCompletePaginate;
+    }
+
+    public function isCompletePaginate(int $count): bool
+    {
+        return ($this->limit + $this->offset) < $count;
     }
 
     protected function setPagination(): void
     {
         $this->params['offset'] = $this->offset;
         $this->params['limit'] = $this->limit;
-    }
-
-    /**
-     * @return string
-     */
-    public function getParams(): string
-    {
-        return $this->method . '?' . http_build_query($this->params);
-    }
-
-    /**
-     * @param int $count
-     * @return bool
-     */
-    public function addOffset(int $count): bool
-    {
-        if ($this->checkPaginate($count)) {
-            $this->offset += $this->limit;
-            $this->setPagination();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @param int $count
-     * @return bool
-     */
-    public function checkPaginate(int $count): bool
-    {
-        return ($this->limit + $this->offset) < $count;
     }
 }

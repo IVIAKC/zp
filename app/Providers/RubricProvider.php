@@ -2,38 +2,27 @@
 
 namespace App\Providers;
 
-
 use App\Entity\Rubric;
-use App\Providers\remote\Client;
+use App\Providers\remote\ZPClient;
 use App\Providers\remote\Request;
 
-/**
- * Class RubricProvider
- * @package App\Provider
- */
 class RubricProvider
 {
-    /** @var Client $client */
     protected $client;
 
-    /**
-     * RubricProvider constructor.
-     * @param Client|null $client
-     */
-    public function __construct(Client $client = null)
+    public function __construct(ZPClient $client = null)
     {
-        $this->client = $client ?? new Client();
+        $this->client = $client ?? new ZPClient();
     }
 
     /**
-     * @return array|Rubric[]
+     * @return Rubric[]
      */
     public function get(): array
     {
-        $request = new Request('rubrics', []);
+        $response = $this->client->send(new Request('rubrics'));
 
-        $response = $this->client->send($request);
-
+        /** @var Rubric[] $rubrics */
         $rubrics = [];
         foreach ($response->getBody() as $item) {
             $rubrics[$item['id']] = new Rubric($item['title']);

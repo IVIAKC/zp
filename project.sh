@@ -53,29 +53,9 @@ function run() {
         down|up|stop|restart|build|pull|logs|rm|run)
             ComposeCommand $@
         ;;
-        web)
-            shift
-            echo 'Exec PHP script'
-            ComposeCommandExec web $@
-        ;;
-        test)
-        	ComposeCommandExec web vendor/bin/phpunit --verbose
-        ;;
         exec)
             shift
             ComposeCommandExec $@
-        ;;
-        analyze_diff)
-            shift
-            DiffCodeAnalyze
-        ;;
-        analyze_phpstan)
-            shift
-            PhpStanAnalyze $@
-        ;;
-        analyze_phpmd)
-            shift
-            PhpMdAnalyze $@
         ;;
         list)
             echo rm run install remove down up stop restart build pull exec \

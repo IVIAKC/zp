@@ -1,47 +1,43 @@
 <?php
 require_once '../vendor/autoload.php';
 
-use App\Interfaces\TableRow;
+$reporter = new \App\Reporter();
 
-/** @var TableRow $position */
-
-$manager = new \App\Manager();
-
-$popularPosition = $manager->getPopularPosition();
-$popularRubric = $manager->getPopularRubric();
+$rowsPopularPosition = $reporter->getRowsPopularPosition();
+$rowsPopularRubric = $reporter->getRowsPopularRubric();
 ?>
-
-
 <!DOCTYPE HTML>
-<html>
+<html lang="ru">
 <head>
     <meta charset="utf-8">
     <title>Отчет</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-<div style="margin-right: 50px; float: left">
-    <table border="1">
-        <caption>Популярные должности</caption>
-        <?php foreach ($popularPosition as $position): ?>
-            <tr>
-                <td><?= $position->getTitle() ?></td>
-                <td><?= $position->getCount() ?></td>
-            </tr>
-        <?php endforeach; ?>
+<div class="wrapper">
+    <div class="container_table">
+        <table>
+            <caption>Популярные должности</caption>
+            <?php foreach ($rowsPopularPosition as $position): ?>
+                <tr>
+                    <td><?= $position->getTitle() ?></td>
+                    <td><?= $position->getCount() ?></td>
+                </tr>
+            <?php endforeach; ?>
 
-    </table>
-</div>
-<div style="float: left">
-    <table border="1">
-        <caption>Популярность рубрик</caption>
-        <?php foreach ($popularRubric as $position): ?>
-            <tr>
-                <td><?= $position->getTitle() ?></td>
-                <td><?= $position->getCount() ?></td>
-            </tr>
-        <?php endforeach; ?>
-
-    </table>
+        </table>
+    </div>
+    <div class="container_table">
+        <table>
+            <caption>Популярность рубрик</caption>
+            <?php foreach ($rowsPopularRubric as $rubric): ?>
+                <tr>
+                    <td><?= $rubric->getTitle() ?></td>
+                    <td><?= $rubric->getCount() ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </div>
 </div>
 </body>
 </html>
